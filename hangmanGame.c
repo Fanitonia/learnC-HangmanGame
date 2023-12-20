@@ -1,6 +1,6 @@
 /*
 A basic hangman game.
-Created for learning C.
+Created by Fanitonia for learning C.
 */
 
 #include <stdio.h>
@@ -33,9 +33,9 @@ int wrongGuess = 0;
 int correctLetters = 0;
 int winTrack = 0;
 int loseTrack = 0;
-bool firstScan = true;
 bool win = false;
 bool lose = false;
+bool usedCorrectLetter = false;
 
 int main()
 {   
@@ -79,6 +79,14 @@ void chooseWord()
 
 void printScreen()
 {   
+    if(win == true)
+    {
+        winTrack++;
+    }
+    else if(lose == true)
+    {
+        loseTrack++;
+    }
     printf("\n\t");
 
     for(int j = 0; j<len; j++)
@@ -118,12 +126,12 @@ void printScreen()
     else if(win == true)
     {
         printf("You guessed it correct! You are a life saver!");
-        winTrack++;
+        
     }
     else if(lose == true)
     {
         printf("He died unfortunately. You lose the game :(");
-        loseTrack++;
+        
     }
 
 }   
@@ -131,22 +139,7 @@ void printScreen()
 void getLetter()
 {
     printf("\nGuess a letter: ");
-    if(firstScan == true && restart == 'N')
-    {
-        scanf("%c", &letter);
-        firstScan = false;
-    }
-    else if(firstScan == true && restart == 'Y')
-    {
-        scanf("%c");
-        scanf("%c", &letter);
-        firstScan = false;
-    }
-    else
-    {
-        scanf("%c");
-        scanf("%c", &letter);
-    }
+    scanf(" %c", &letter);
     letter = toupper(letter);
 }
 
@@ -154,6 +147,8 @@ void checkLetter()
 {
     bool used = false;
     int letterOfWord = len;
+
+
     if(letter == '*')
     {
         checkWord();
@@ -162,10 +157,22 @@ void checkLetter()
     {
         for(int m = 0; m<len; m++)
         {
+            if(wordOnScreen[m] == letter)
+            {
+                usedCorrectLetter = true;
+            }
+        }
+
+        for(int m = 0; m<len; m++)
+        {
             if(word[m] == letter)
             {
                 wordOnScreen[m] = letter;
-                correctLetters++;
+                if(usedCorrectLetter == false)
+                {
+                    correctLetters++;
+                    usedCorrectLetter = false;
+                }               
             }
             else
             {
@@ -223,7 +230,6 @@ void checkLose()
 
 void resetGame()
 {
-    firstScan = true;
     win = false;
     lose = false; 
     wrongGuess = 0; 
