@@ -2,4 +2,5 @@
  A basic hangman game that created for learning C.
 
  
-![learnC-HangmanGame(picture)](https://github.com/Fanitonia/learnC-HangmanGame/assets/152016945/adbb392e-386a-43e9-a92c-08e500df4b8f)
+
+![learnC-HangmanGame(picture)](https://github.com/Fanitonia/learnC-HangmanGame/assets/152016945/23155012-b13e-4f1f-8744-856892a34d68)
