@@ -19,23 +19,29 @@ void checkWord();
 void checkLose();
 void resetGame();
 
-char words[][10] = {"ARABA", "KLAVYE", "FARE", "EKRAN", "KALEM", "BABAANNE", "TAHTA", "FUTBOL", 
-                    "NEFRET", "ANAKART", "DOLAP"};
+char words[][15] = {"COMPUTER", "KEYBOARD", "HEADPHONE", "MIRROR", "WATER", "WHITE", "PUZZLE", "SOCCER", 
+                    "BASKETBALL", "BREAKFAST", "ELECTRICITY", "HORROR", "PAPER", "MOTHERBOARD", "BEER"};
+char hints[][20] = {"TECHNOLOGY", "COMPUTERS", "SOUND", "LIGHT", "A DRINK", "A COLOR", "HANGMAN GAME", "A SPORT",
+                    "A SPORT", "MORNING", "NIKOLA TESLA", "A MOVIE GENRE", "WHITE", "COMPUTERS", "A DRINK"};
 char word[10];
 char wordOnScreen[10];
 char letter;
 char letters[6];
 char guessWord[10];
 char restart = 'N';
+int wordNumber;
 int numberOfWords;
 int len;
 int wrongGuess = 0;
 int correctLetters = 0;
 int winTrack = 0;
 int loseTrack = 0;
+int hintNumber = 3;
 bool win = false;
 bool lose = false;
 bool usedCorrectLetter = false;
+bool hintOpen = false;
+bool hintUsed = false;
 
 int main()
 {   
@@ -72,9 +78,9 @@ void chooseWord()
 {
     numberOfWords = sizeof(words)/sizeof(words[0]); 
     srand(time(0));
-    int n = rand() % numberOfWords;
-    strcpy(word, words[n]);
-    len = strlen(word);  
+    wordNumber = rand() % numberOfWords;
+    strcpy(word, words[wordNumber]);
+    len = strlen(word);
 }
 
 void printScreen()
@@ -97,11 +103,25 @@ void printScreen()
     printf("\n\t\t\t______");
     printf("\t\tWins: %d", winTrack);
     printf("\tLoses: %d", loseTrack);
-    printf("\n\t\t\t|    |\n");
+    printf("\n\t\t\t|    |");
+    printf("\t\tNumber of hints you have: %d (press '+' for hint)\n", hintNumber);
+  
     if(wrongGuess > 0)
-        printf("\t\t\t|    O\n");
+        printf("\t\t\t|    O");
     else
-        printf("\t\t\t|\n");
+        printf("\t\t\t|");
+
+    if(hintOpen == true)
+    {
+        printf("\t\tHint: %s\n", hints[wordNumber]);     
+    }
+    else if(hintUsed == true)
+    {
+        printf("\t\tYou can't take hints anymore!\n");
+    }
+    else
+        printf("\n");
+  
     if(wrongGuess == 1 || wrongGuess == 0)
         printf("\t\t\t| \n");
     if(wrongGuess == 2)
@@ -119,21 +139,18 @@ void printScreen()
         printf("The letters that you already tried: ");
         for(int h = 0; h<wrongGuess; h++)
         {
-            printf("%c", letters[h]);
+            printf("%c ", letters[h]);
         }
         printf("\nIf you want to guess the word press '*'");
     }
     else if(win == true)
     {
-        printf("You guessed it correct! You are a life saver!");
-        
+        printf("You guessed it correct! You are a life saver!");    
     }
     else if(lose == true)
     {
-        printf("He died unfortunately. You lose the game :(");
-        
+        printf("He died unfortunately. You lose the game :(");   
     }
-
 }   
 
 void getLetter()
@@ -148,10 +165,21 @@ void checkLetter()
     bool used = false;
     int letterOfWord = len;
 
-
     if(letter == '*')
     {
         checkWord();
+    }
+    else if(letter == '+')
+    {
+        if(hintNumber != 0)
+        {
+            hintOpen = true;
+            hintNumber--;
+        }
+        else
+        {
+            hintUsed = true;
+        }
     }
     else
     {
@@ -235,6 +263,8 @@ void resetGame()
     wrongGuess = 0; 
     strcpy(letters, "     ");
     correctLetters = 0; 
+    hintOpen = false;
+    hintUsed = false;
 }
 
 
